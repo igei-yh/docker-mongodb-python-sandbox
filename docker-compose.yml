@@ -1,0 +1,39 @@
+version: "3.4"
+
+x-template: &mongo-template
+    image: mongo:3.4.20-xenial
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip", "0.0.0.0", "--replSet", "rs0" ]
+
+services:
+
+  mongo1:
+    hostname: mongo-primary1
+    container_name: mongo-primary1
+    ports:
+      - 27091:27017
+    <<: *mongo-template
+  mongo2:
+    hostname: mongo-secondary1
+    container_name: mongo-secondary1
+    ports:
+      - 27092:27017
+    <<: *mongo-template
+  mongo3:
+    hostname: mongo-secondary2
+    container_name: mongo-secondary2
+    ports:
+      - 27093:27017
+    <<: *mongo-template
+  mongo4:
+    hostname: mongo-secondary3
+    container_name: mongo-secondary3
+    ports:
+      - 27094:27017
+    <<: *mongo-template
+  mongo5:
+    hostname: mongo-secondary4
+    container_name: mongo-secondary4
+    ports:
+      - 27095:27017
+    <<: *mongo-template
