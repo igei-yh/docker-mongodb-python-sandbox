@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 
 # create mongodb client to connect primary node.
-conn = ['localhost:27091']
+conn = ['mongo-primary1:27017']
 c = MongoClient(conn)
 
 # check replica set configuration
@@ -30,4 +30,3 @@ else:
     for m in stat['members']:
         print('node: %s, role: %s'
                 % (m['name'], m['stateStr']))
-
