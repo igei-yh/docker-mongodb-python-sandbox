@@ -4,8 +4,11 @@ from pymongo import MongoClient
 
 
 # create mongodb client to connect primary node.
-conn = ['localhost:27091']
-c = MongoClient(conn)
+try:
+    conn = ['mongo-primary1:27017']
+    c = MongoClient(conn)
+except Exception as e:
+    print(e)
 
 # define replica set config
 config = {'_id': 'rs0', 'members':[
