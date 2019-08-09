@@ -37,3 +37,24 @@ services:
     ports:
       - 27095:27017
     <<: *mongo-template
+  pymongo:
+    build: .
+    hostname: pymongo
+    container_name: pymongo
+    restart: always
+    tty: true
+    depends_on:
+      - "mongo1"
+      - "mongo2"
+      - "mongo3"
+      - "mongo4"
+      - "mongo5"
+    links:
+      - mongo1:mongo-primary1
+      - mongo1:mongo-secondary1
+      - mongo2:mongo-secondary2
+      - mongo3:mongo-secondary2
+      - mongo4:mongo-secondary4
+      - mongo5:mongo-secondary5
+    volumes:
+      - .:/usr/src/app
