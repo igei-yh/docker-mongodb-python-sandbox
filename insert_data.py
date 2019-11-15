@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import random
+import string
 from pymongo import MongoClient
 
 
@@ -11,25 +13,28 @@ hosts = [
     'mongo-secondary2:27017',
     'mongo-secondary3:27017',
     'mongo-secondary4:27017']
-c = MongoClient(host=hosts, replicaSet='rs0', readPreference='secondary', readPreferenceTags='group:batch')
 
+def random_data():
+    return {
+            "name": "".join(random.choices(string.ascii_lowercase, k=4)),
+            "age": random.randint(20,50)}
 
-db = c.test
-test = db.test
+try:
+    c = MongoClient(host=hosts,
+                    replicaSet='rs0',
+                    readPreference='secondary',
+                    readPreferenceTags='group:batch')
+    db = c.test
+    test = db.test
 
-# insert one
-test.insert_one(
-    {
-        "name": "hoge",
-        "age": 20
-    })
+    # insert one
+    test.insert_one({"name": "hoge", "age": 20})
 
-# insert many records
-test.insert_many(
-    [
-        {"name": "fuga", "age": 30},
-        {"name": "puge", "age": 40}
-    ]
-)
+    # insert many records
+    doc = [ random_data() for n in range(1000)]
+    test.insert_many(doc)
 
-c.close()
+    c.close()
+except Exception as e:
+    print(type(e))
+    print(e)
